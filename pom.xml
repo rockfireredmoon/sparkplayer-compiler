@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>icemoon</groupId>
+	<artifactId>taw-compiler</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Compiles TAW clients assets</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.9.6</version>
+		</dependency>
+	</dependencies>
+	<description>A suite of ant tasks that may be used to compile a working Earth Eternal client from the source files.
+
+The tasks can compile :-
+
+* XML Mesh files to Mesh
+* MP3 and WAV to OGG
+* Squirrel NUT to compiled bytecode (CNUT)
+
+It also has tasks for CAR encoding (from zip files), and all compilers are incremental, so will only compile to target files where the source modification time differs. </description>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<outputDirectory>target/classes</outputDirectory>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.exe</include>
+					<include>**/*.tar.gz</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

@@ -1,0 +1,4 @@
+*****NOTE******
+
+It is important that the sq.exe is run with a 32-bit wine installation. Failure
+to do will result in corrupted script assets
