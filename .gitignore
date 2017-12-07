@@ -5,3 +5,4 @@
 *.classpath
 /Makefile
 *.project
+/CMakeCache.txt
