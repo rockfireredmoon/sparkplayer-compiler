@@ -12,6 +12,7 @@
 			<artifactId>ant</artifactId>
 			<version>1.9.6</version>
 		</dependency>
+
 	</dependencies>
 	<description>A suite of ant tasks that may be used to compile a working Earth Eternal client from the source files.
 
@@ -26,15 +27,32 @@ It also has tasks for CAR encoding (from zip files), and all compilers are incre
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<outputDirectory>target/classes</outputDirectory>
-		<resources>
-			<resource>
-				<targetPath>.</targetPath>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.exe</include>
-					<include>**/*.tar.gz</include>
-				</includes>
-			</resource>
-		</resources>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+
+				<executions>
+					<execution>
+						<id>copy-linux-natives</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<ant antfile="build.xml"/>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
 	</build>
+
+
 </project>

@@ -8,14 +8,14 @@ public class Sq extends AbstractTool {
 
 	private static Sq instance = new Sq();
 
-	private File compilerFile;
-
 	public static Sq get() {
 		return instance;
 	}
 
-	private Sq() {
-		compilerFile = extract("sq.exe");
+	private File compilerFile;
+
+	{
+		compilerFile = extract(SystemUtils.IS_OS_WINDOWS ? "sq.exe" : "sq");
 	}
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
@@ -41,10 +41,12 @@ public class Sq extends AbstractTool {
 		int ret = run(dir, args, sb);
 		String output = sb.toString();
 		System.out.println(output);
-		if(output.contains("Error")) {
+		if (output.contains("Error")) {
 			return false;
 		}
-		return ret == 0;
+		if (ret == 0)
+			return true;
+		System.out.print("Squirrel compiler exited with status " + ret);
+		return false;
 	}
-
 }

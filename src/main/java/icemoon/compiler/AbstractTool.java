@@ -11,56 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipException;
 
-public class AbstractTool {
-
-	private static final String WINE_LINUX_X86 = "wine-linux-x86-2.17.tar.gz";
-
-	static {
-		// Make a script for a persistent wine server
-
-	}
-
-	protected boolean wine;
-	private String extractedWine;
-
-	protected AbstractTool() {
-		String msystem = System.getenv().get("MSYSTEM");
-		wine = !(msystem != null && msystem.startsWith("MINGW"));
-
-		/*
-		 * We MUST use a 32-bit wine, so if WINEBIN is not set then extract this copy
-		 * and use it
-		 */
-		if (wine && System.getenv("WINEBIN") == null) {
-			File extracted = new File(System.getProperty("user.home") + File.separator + ".cache" + File.separator
-					+ "tawcompiler" + File.separator + "wine");
-			if (!extracted.exists()) {
-				System.out.print(String.format("Extracting Wine %s to %s", WINE_LINUX_X86, extracted));
-				InputStream in = AbstractTool.class.getClassLoader().getResourceAsStream(WINE_LINUX_X86);
-				if (in == null)
-					throw new IllegalStateException(String.format(
-							"Cannot find 32-bit wine installation to extract. Either set WINEBIN to point to one (it MUST be 32-bit), or ensure the resource %s exists.",
-							WINE_LINUX_X86));
-				try {
-					extractFolder(in, extracted);
-				} catch (ZipException e) {
-					throw new IllegalStateException("Failed to extract Wine.", e);
-				} catch (IOException e) {
-					throw new IllegalStateException("Failed to extract Wine.", e);
-				}
-			}
-			extractedWine = extracted.getPath() + File.separator + "bin" + File.separator + "wine";
-		}
-	}
-
-	protected String getWine() {
-		if (!wine)
-			throw new IllegalStateException();
-		if (extractedWine != null)
-			return extractedWine;
-		String winebin = System.getenv("WINEBIN");
-		return winebin == null ? "wine" : winebin;
-	}
+public abstract class AbstractTool {
 
 	protected File getTempDir() {
 		File tempDir = new File(new File(System.getProperty("java.io.tmpdir")),
@@ -74,14 +25,16 @@ public class AbstractTool {
 		return run(dir, args, null);
 	}
 
+	protected List<String> getArgs() {
+		List<String> args = new ArrayList<String>();
+		return args;
+	}
+
 	protected int run(File dir, List<String> args, StringBuilder buf) throws IOException, InterruptedException {
 		ProcessBuilder pb = new ProcessBuilder(args);
 		pb.redirectErrorStream(true);
 		Map<String, String> environment = pb.environment();
-		environment.putAll(System.getenv());
-		if (wine) {
-			environment.put("WINEPREFIX", new File(getTempDir(), "wine").getAbsolutePath());
-		}
+		populateRunEnvironment(environment);
 		if (dir != null)
 			pb.directory(dir);
 		Process process = pb.start();
@@ -105,7 +58,7 @@ public class AbstractTool {
 		try {
 			FileOutputStream fos = new FileOutputStream(compilerFile);
 			try {
-				InputStream in = Sq.class.getResourceAsStream("/" + tool);
+				InputStream in = AbstractTool.class.getResourceAsStream("/" + tool);
 				if (tool == null)
 					throw new IOException(tool + " not found in resources.");
 				try {
@@ -116,18 +69,12 @@ public class AbstractTool {
 			} finally {
 				fos.close();
 			}
+			if(SystemUtils.IS_OS_UNIX)
+				compilerFile.setExecutable(true);
 		} catch (IOException ioe) {
 			throw new RuntimeException("Failed to extract compiler binary.", ioe);
 		}
 		return compilerFile;
-	}
-
-	protected List<String> getArgs() {
-		List<String> args = new ArrayList<String>();
-		if (wine) {
-			args.add(getWine());
-		}
-		return args;
 	}
 
 	static public void extractFolder(InputStream in, File destDir) throws ZipException, IOException {
@@ -143,12 +90,7 @@ public class AbstractTool {
 			new Thread() {
 				public void run() {
 					try {
-						int r;
-						byte[] buf = new byte[32768];
-						while ((r = cin.read(buf)) != -1) {
-							System.out.write(buf, 0, r);
-							System.out.flush();
-						}
+						CompilerUtil.copy(cin, System.out);
 					} catch (IOException ioe) {
 					}
 				}
@@ -174,5 +116,8 @@ public class AbstractTool {
 				throw new IOException("Interruped while completing.", iie);
 			}
 		}
+	}
+	
+	protected void populateRunEnvironment(Map<String, String> environment) {
 	}
 }

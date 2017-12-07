@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class WAV extends AbstractTool {
+public class CAR extends AbstractTool {
 
-	private static WAV instance = new WAV();
+	private static CAR instance = new CAR();
 
-	public static WAV get() {
+	private File compilerFile;
+
+	public static CAR get() {
 		return instance;
+	}
+
+	private CAR() {
+		compilerFile = extract(SystemUtils.IS_OS_WINDOWS ? "car.exe" : "car");
 	}
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
@@ -25,10 +31,9 @@ public class WAV extends AbstractTool {
 			throw new IOException("Failed to create output directory for " + outF);
 
 		List<String> args = getArgs();
-		args.add("oggenc");
-		args.add("-Q");
-		args.add(in);
-		args.add("-o");
+		args.add(compilerFile.getAbsolutePath());
+		args.add("create");
+		args.add(inF.getAbsolutePath());
 		args.add(outF.getAbsolutePath());
 
 		int ret = run(dir, args);

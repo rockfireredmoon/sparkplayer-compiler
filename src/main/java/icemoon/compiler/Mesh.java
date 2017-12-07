@@ -15,10 +15,6 @@ public class Mesh extends AbstractTool implements Output {
 		return instance;
 	}
 
-	protected Mesh() {
-		wine = false;
-	}
-
 	public static String getMeshBasePath(String sourceFileName) {
 		String basepath = sourceFileName;
 		int idx = basepath.lastIndexOf(".");
@@ -62,7 +58,8 @@ public class Mesh extends AbstractTool implements Output {
 		int ret = run(dir, args);
 		if (ret == 0) {
 			String bn = getMeshBasePath(inF.getName());
-			File meshOut = new File(inF.getParentFile(), bn + (inF.getName().endsWith(".skeleton.xml") ? ".skeleton" : ".mesh"));
+			File meshOut = new File(inF.getParentFile(),
+					bn + (inF.getName().endsWith(".skeleton.xml") ? ".skeleton" : ".mesh"));
 			if (meshOut.exists() && !meshOut.equals(outF)) {
 				if (!meshOut.renameTo(outF)) {
 					CompilerUtil.copyFile(meshOut, outF);

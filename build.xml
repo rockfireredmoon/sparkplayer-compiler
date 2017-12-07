@@ -1,0 +1,13 @@
+<project name="taw-compile-native" default="build">
+
+	<target name="build">
+		<mkdir dir="target/classes"/>
+		<exec executable="cmake">
+			<arg value="CMakeLists.txt"/>
+		</exec>
+		<exec executable="make"/>
+		<move file="src/main/c++/squirrel/sqcompiler/sq" todir="target/classes"/>
+		<move file="src/main/c++/car/car" todir="target/classes"/>
+	</target>
+
+</project>

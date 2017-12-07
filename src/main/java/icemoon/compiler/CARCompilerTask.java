@@ -61,7 +61,7 @@ public class CARCompilerTask extends AbstractCompilerTask {
 			scanDir(baseDir, files, mapper);
 
 			for (String src : compileList) {
-				if (!CARDecode.get().compile(src, mapper.mapFileName(src)[0], baseDir) && failOnError) {
+				if (!CAR.get().compile(src, mapper.mapFileName(src)[0], baseDir) && failOnError) {
 					throw new BuildException(String.format("Compile of %s failed.", src));
 				}
 			}

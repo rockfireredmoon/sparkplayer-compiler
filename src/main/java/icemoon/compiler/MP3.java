@@ -12,10 +12,6 @@ public class MP3 extends AbstractTool {
 		return instance;
 	}
 
-	private MP3() {
-		wine = false;
-	}
-
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
 		File outF = new File(out);
 		if (!outF.isAbsolute() && dir != null)
@@ -28,8 +24,11 @@ public class MP3 extends AbstractTool {
 		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs())
 			throw new IOException("Failed to create output directory for " + outF);
 
+		System.out.println("Compiling " + in);
+
 		List<String> args = getArgs();
 		args.add("ffmpeg");
+		args.add("-y");
 		args.add("-v");
 		args.add("0");
 		args.add("-i");

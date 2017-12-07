@@ -1,0 +1,7 @@
+/.settings/
+/CMakeFiles/
+/target/
+*.cmake
+*.classpath
+/Makefile
+*.project
