@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>icemoon</groupId>
-	<artifactId>taw-compiler</artifactId>
+	<artifactId>sparkplayer-compiler</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Compiles TAW clients assets</name>
+	<name>Compiles Sparkplayer assets</name>
 
 	<dependencies>
 		<dependency>
@@ -14,15 +14,16 @@
 		</dependency>
 
 	</dependencies>
-	<description>A suite of ant tasks that may be used to compile a working Earth Eternal client from the source files.
+	<description>A suite of ant tasks that may be used to compile a binary assets from source assets for a SparkPlayer based MMO client such as Earth Eternal.
 
 The tasks can compile :-
 
 * XML Mesh files to Mesh
 * MP3 and WAV to OGG
 * Squirrel NUT to compiled bytecode (CNUT)
+* AbilityTable.txt to compiled bytecode (CNUT)
 
-It also has tasks for CAR encoding (from zip files), and all compilers are incremental, so will only compile to target files where the source modification time differs. </description>
+It also has tasks for CAR encoding (from zip files), and all compilers are incremental, so will only compile to target files where the source modification time differs.</description>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
