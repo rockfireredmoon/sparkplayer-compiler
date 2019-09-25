@@ -7,6 +7,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.util.FileNameMapper;
 
+@Deprecated
 public class CARCompilerTask extends AbstractCompilerTask {
 
 	public static final String ERROR_NO_BASE_EXISTS = "base or destdir does not exist: ";

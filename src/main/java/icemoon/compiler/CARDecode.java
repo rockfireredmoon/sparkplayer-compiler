@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Deprecated
 public class CARDecode extends AbstractTool {
 
 	private static CARDecode instance = new CARDecode();
