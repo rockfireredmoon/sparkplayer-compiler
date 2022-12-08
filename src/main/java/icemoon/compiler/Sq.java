@@ -15,7 +15,7 @@ public class Sq extends AbstractTool {
 	private File compilerFile;
 
 	{
-		compilerFile = extract(SystemUtils.IS_OS_WINDOWS ? "sq.exe" : "sq");
+		compilerFile = extract(SystemUtils.IS_OS_WINDOWS ? "eesq.exe" : "eesq");
 	}
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {

@@ -1,0 +1,5 @@
+# -*- mode: meson -*-
+# Meson Build Options
+
+option('sq32', type: 'boolean', value: true)
+option('sq211_compat', type: 'boolean', value: true)
