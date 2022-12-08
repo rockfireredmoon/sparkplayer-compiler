@@ -1,3 +1,10 @@
+# Ant jar directory (default path for web resources)
+if get_option('antdir') == ''
+	antdir = get_option('sysconfdir') + '/ant.d'
+else
+	antdir = get_option('antdir')
+endif
+
 # Jar for Ant Tasks
 ant_jar = jar('sparkplayer-compiler', 
 	'icemoon/compiler/FastMath.java',
@@ -37,4 +44,4 @@ ant_jar = jar('sparkplayer-compiler',
 	'icemoon/compiler/WAVCompilerTask.java',
 	java_args: ['-classpath', meson.project_source_root() + '/lib/ant.jar'],
 	install: true,
-	install_dir: get_option('datadir') / 'java')
+	install_dir: antdir)

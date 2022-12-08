@@ -3,3 +3,4 @@
 
 option('sq32', type: 'boolean', value: true)
 option('sq211_compat', type: 'boolean', value: true)
+option('antdir', type: 'string', value: '', description: 'Where to install ant task jar. Defaults to sysconfdir/ant.d.')
