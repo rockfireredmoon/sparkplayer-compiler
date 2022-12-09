@@ -355,7 +355,9 @@ bool SQFunctionProto::Save(SQVM *v,SQUserPointer up,SQWRITEFUNC write)
 	_CHECK_IO(SafeWrite(v,write,up,&noutervalues,sizeof(noutervalues)));
 	_CHECK_IO(SafeWrite(v,write,up,&nlocalvarinfos,sizeof(nlocalvarinfos)));
 	_CHECK_IO(SafeWrite(v,write,up,&nlineinfos,sizeof(nlineinfos)));
+#ifndef SQ211_COMPAT
 	_CHECK_IO(SafeWrite(v,write,up,&ndefaultparams,sizeof(ndefaultparams)));
+#endif
 	_CHECK_IO(SafeWrite(v,write,up,&ninstructions,sizeof(ninstructions)));
 	_CHECK_IO(SafeWrite(v,write,up,&nfunctions,sizeof(nfunctions)));
 	_CHECK_IO(WriteTag(v,write,up,SQ_CLOSURESTREAM_PART));
@@ -387,8 +389,10 @@ bool SQFunctionProto::Save(SQVM *v,SQUserPointer up,SQWRITEFUNC write)
 	_CHECK_IO(WriteTag(v,write,up,SQ_CLOSURESTREAM_PART));
 	_CHECK_IO(SafeWrite(v,write,up,_lineinfos,sizeof(SQLineInfo)*nlineinfos));
 
+#ifndef SQ211_COMPAT
 	_CHECK_IO(WriteTag(v,write,up,SQ_CLOSURESTREAM_PART));
 	_CHECK_IO(SafeWrite(v,write,up,_defaultparams,sizeof(SQInteger)*ndefaultparams));
+#endif
 
 	_CHECK_IO(WriteTag(v,write,up,SQ_CLOSURESTREAM_PART));
 	_CHECK_IO(SafeWrite(v,write,up,_instructions,sizeof(SQInstruction)*ninstructions));
