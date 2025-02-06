@@ -42,6 +42,11 @@ ant_jar = jar('sparkplayer-compiler',
 	'icemoon/compiler/Vector4f.java',
 	'icemoon/compiler/WAV.java',
 	'icemoon/compiler/WAVCompilerTask.java',
-	java_args: ['-classpath', meson.project_source_root() + '/lib/ant.jar'],
+	java_args: [
+		'-classpath', 
+		meson.project_source_root() + '/lib/ant.jar',
+		'-source', '11',
+		'-target', '11',
+	],
 	install: true,
 	install_dir: antdir)

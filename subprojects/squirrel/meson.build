@@ -3,7 +3,7 @@ project('squirrel', ['cpp','c'], default_options : [
 	
 compiler = meson.get_compiler('cpp')
 
-if build_machine.system() == 'windows'
+if host_machine.system() == 'windows'
 	add_project_arguments(['/permissive'],
                      language: ['cpp','c'])
 else

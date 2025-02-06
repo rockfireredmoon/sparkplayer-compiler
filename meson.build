@@ -2,7 +2,7 @@ project('sparkplayer-compiler', ['cpp','c','java'], version: '1.0.0', default_op
 	'cpp_std=c++14'])
 
 # Whether to build Squirrel for 32 bit binary compatibility (when running on a 64 bit architecture)
-if build_machine.cpu_family() == 'x86_64' and get_option('sq32')
+if host_machine.cpu_family() == 'x86_64' and get_option('sq32')
 	add_global_arguments(['-D_SQ32=1'],
 	                   language: ['cpp','c'])
 endif
@@ -15,7 +15,7 @@ if get_option('sq211_compat')
 	                   language: ['cpp','c'])
 endif
 
-if build_machine.system() == 'windows' and get_option('unicode')
+if host_machine.system() == 'windows' and get_option('unicode')
 	add_global_arguments([
 			'-DUNICODE',
 			'-D_UNICODE'

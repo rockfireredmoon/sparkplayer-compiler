@@ -11,14 +11,14 @@ public class Abilities extends AbstractTool {
 	private static Abilities instance = new Abilities();
 
 	public static Abilities get() {
-		return instance;
+		return instance; 
 	}
 
 	private Abilities() {
 	}
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
-		File outF = new File(out);
+		File outF = new File(out); 
 		if (!outF.isAbsolute() && dir != null)
 			outF = new File(dir, outF.getPath());
 
