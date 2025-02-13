@@ -7,3 +7,4 @@
 *.project
 /CMakeCache.txt
 /build/
+/bin/

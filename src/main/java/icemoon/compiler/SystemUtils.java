@@ -439,7 +439,7 @@ public class SystemUtils {
      * @since Java 1.3
      */
     public static final String JAVA_SPECIFICATION_VERSION = getSystemProperty("java.specification.version");
-   
+
     /**
      * <p>
      * The {@code java.util.prefs.PreferencesFactory} System Property. A class name.

@@ -33,7 +33,7 @@ import org.xml.sax.helpers.DefaultHandler;
 // Some constants
 //
 // http://ogrenightly.free.fr/docs/OgreSkeletonFileFormat_8h_source.html
-// 
+//
 // https://github.com/ehsan/ogre/blob/master/OgreMain/src/OgreSerializer.cpp
 
 public class AnimToXML {
@@ -51,7 +51,7 @@ public class AnimToXML {
 
 	public static class NodeAnimationTrack {
 		private short boneHandle;
-		private List<TransformKeyFrame> frames = new ArrayList<AnimToXML.TransformKeyFrame>();
+		private List<TransformKeyFrame> frames = new ArrayList<>();
 
 		NodeAnimationTrack(short boneHandle) {
 			this.boneHandle = boneHandle;
@@ -75,7 +75,7 @@ public class AnimToXML {
 		float baseKeyTime;
 		String baseAnimName;
 		boolean something;
-		List<NodeAnimationTrack> tracks = new ArrayList<AnimToXML.NodeAnimationTrack>();
+		List<NodeAnimationTrack> tracks = new ArrayList<>();
 
 		Animation(String name, float len) {
 			this.name = name;
@@ -96,7 +96,7 @@ public class AnimToXML {
 	}
 
 	public static class Skeleton {
-		private List<Animation> animations = new ArrayList<Animation>();
+		private List<Animation> animations = new ArrayList<>();
 
 		public Animation createAnimation(String name, float len) {
 			Animation animation = new Animation(name, len);
@@ -243,9 +243,10 @@ public class AnimToXML {
 									pw.println("                                <axis x=\"" + axis.x + "\" y=\"" + axis.y
 											+ "\" z=\"" + axis.z + "\"/>");
 									pw.println("                            </rotate>");
-									if (f.scale != null)
+									if (f.scale != null) {
 										pw.println("                            <scale x=\"" + f.scale[0] + "\" y=\"" + f.scale[1]
 												+ "\" z=\"" + f.scale[2] + "\"/>");
+									}
 									pw.println("                        </keyframe>");
 								}
 								pw.println("                    </keyframes>");
@@ -347,8 +348,9 @@ public class AnimToXML {
 	public static String readString(DataInput din) throws IOException {
 		StringBuilder bui = new StringBuilder();
 		byte c;
-		while ((c = din.readByte()) != 0x0a)
+		while ((c = din.readByte()) != 0x0a) {
 			bui.append((char) c);
+		}
 		return bui.toString();
 	}
 
@@ -363,11 +365,13 @@ public class AnimToXML {
 	}
 
 	class SkelHandler extends DefaultHandler {
-		private Map<Integer, String> bones = new HashMap<Integer, String>();
+		private Map<Integer, String> bones = new HashMap<>();
 
+		@Override
 		public void startDocument() throws SAXException {
 		}
 
+		@Override
 		public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
 			String key = localName;
 			if (key.equalsIgnoreCase("bone")) {
@@ -375,6 +379,7 @@ public class AnimToXML {
 			}
 		}
 
+		@Override
 		public void endDocument() throws SAXException {
 		}
 	}

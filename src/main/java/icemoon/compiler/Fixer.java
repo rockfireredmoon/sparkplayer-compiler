@@ -41,16 +41,16 @@ public class Fixer extends AbstractBatchFileProcessor {
 			try {
 				fin.readFully(buf);
 				StringBuilder bui = null;
-				for (int i = 0; i < buf.length; i++) {
-					if (buf[i] == '[') {
+				for (byte element : buf) {
+					if (element == '[') {
 						bui = new StringBuilder();
-					} else if (buf[i] == ']' && bui != null) {
+					} else if (element == ']' && bui != null) {
 						return bui.toString();
 					} else if (bui != null) {
-						bui.append((char) buf[i]);
+						bui.append((char) element);
 					}
 				}
-				throw new IOException("No serializer found. Not a mesh file?");
+				throw new IOException("No serializer found. " + file + " not a mesh file?");
 			} finally {
 				fin.close();
 			}
@@ -97,7 +97,7 @@ public class Fixer extends AbstractBatchFileProcessor {
 							// End of serializer
 							fos.write((type.equals(Type.FIX) ? "[MeshSerializer_v1.40]" : "[MeshSerializer_v1.40o]").getBytes());
 							iidx = 1;
-							CompilerUtil.copy(din, fos);
+							din.transferTo(fos);
 							break;
 						} else if (iidx != 0) {
 							fos.write(b);

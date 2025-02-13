@@ -31,7 +31,6 @@
  */
 package icemoon.compiler;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -112,7 +111,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	/**
 	 * Constructor instantiates a new <code>Vector3f</code> that is a copy of
 	 * the provided vector
-	 * 
+	 *
 	 * @param copy
 	 *            The Vector3f to copy
 	 */
@@ -497,8 +496,9 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 			logger.warning("Provided vector is null, null returned.");
 			return null;
 		}
-		if (store == null)
+		if (store == null) {
 			store = new Vector4f();
+		}
 		return store.set(x * vec.x, y * vec.y, z * vec.z, w * vec.w);
 	}
 
@@ -729,7 +729,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	/**
 	 * <code>maxLocal</code> computes the maximum value for each component in
 	 * this and <code>other</code> vector. The result is stored in this vector.
-	 * 
+	 *
 	 * @param other
 	 */
 	public Vector4f maxLocal(Vector4f other) {
@@ -743,7 +743,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	/**
 	 * <code>minLocal</code> computes the minimum value for each component in
 	 * this and <code>other</code> vector. The result is stored in this vector.
-	 * 
+	 *
 	 * @param other
 	 */
 	public Vector4f minLocal(Vector4f other) {
@@ -780,7 +780,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	/**
 	 * Sets this vector to the interpolation by changeAmnt from this to the
 	 * finalVec this=(1-changeAmnt)*this + changeAmnt * finalVec
-	 * 
+	 *
 	 * @param finalVec
 	 *            The final vector to interpolate towards
 	 * @param changeAmnt
@@ -798,7 +798,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	/**
 	 * Sets this vector to the interpolation by changeAmnt from beginVec to
 	 * finalVec this=(1-changeAmnt)*beginVec + changeAmnt * finalVec
-	 * 
+	 *
 	 * @param beginVec
 	 *            the beging vector (changeAmnt=0)
 	 * @param finalVec
@@ -818,19 +818,22 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	/**
 	 * Check a vector... if it is null or its floats are NaN or infinite, return
 	 * false. Else return true.
-	 * 
+	 *
 	 * @param vector
 	 *            the vector to check
 	 * @return true or false as stated above.
 	 */
 	public static boolean isValidVector(Vector4f vector) {
-		if (vector == null)
+		if (vector == null) {
 			return false;
-		if (Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z) || Float.isNaN(vector.w))
+		}
+		if (Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z) || Float.isNaN(vector.w)) {
 			return false;
+		}
 		if (Float.isInfinite(vector.x) || Float.isInfinite(vector.y) || Float.isInfinite(vector.z)
-				|| Float.isInfinite(vector.w))
+				|| Float.isInfinite(vector.w)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -870,6 +873,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	 *            the object to compare for equality
 	 * @return true if they are equal
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Vector4f)) {
 			return false;
@@ -880,14 +884,9 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 		}
 
 		Vector4f comp = (Vector4f) o;
-		if (Float.compare(x, comp.x) != 0)
+		if ((Float.compare(x, comp.x) != 0) || (Float.compare(y, comp.y) != 0) || (Float.compare(z, comp.z) != 0) || (Float.compare(w, comp.w) != 0)) {
 			return false;
-		if (Float.compare(y, comp.y) != 0)
-			return false;
-		if (Float.compare(z, comp.z) != 0)
-			return false;
-		if (Float.compare(w, comp.w) != 0)
-			return false;
+		}
 		return true;
 	}
 
@@ -895,9 +894,10 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	 * <code>hashCode</code> returns a unique code for this vector object based
 	 * on it's values. If two vectors are logically equivalent, they will return
 	 * the same hash code value.
-	 * 
+	 *
 	 * @return the hash code value of this vector.
 	 */
+	@Override
 	public int hashCode() {
 		int hash = 37;
 		hash += 37 * hash + Float.floatToIntBits(x);
@@ -915,6 +915,7 @@ public final class Vector4f implements Cloneable, java.io.Serializable {
 	 *
 	 * @return the string representation of this vector.
 	 */
+	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ", " + w + ")";
 	}

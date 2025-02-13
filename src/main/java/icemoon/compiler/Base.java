@@ -20,7 +20,7 @@ public class Base extends AbstractTool {
 
 	private static Base instance = new Base();
 
-	private Map<String, BufferedImage> cache = new HashMap<String, BufferedImage>();
+	private Map<String, BufferedImage> cache = new HashMap<>();
 
 	public static Base get() {
 		return instance;
@@ -31,15 +31,18 @@ public class Base extends AbstractTool {
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
 		File outF = new File(out);
-		if (!outF.isAbsolute() && dir != null)
+		if (!outF.isAbsolute() && dir != null) {
 			outF = new File(dir, outF.getPath());
+		}
 
 		File inF = new File(in);
-		if (!inF.isAbsolute() && dir != null)
+		if (!inF.isAbsolute() && dir != null) {
 			inF = new File(dir, inF.getPath());
+		}
 
-		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs())
+		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs()) {
 			throw new IOException("Failed to create output directory for " + outF);
+		}
 
 		System.out.println(String.format("Compiling %s to %s", inF, outF));
 
@@ -81,8 +84,9 @@ public class Base extends AbstractTool {
 			String v = splatProps.getProperty(p);
 			if (v != null && v.length() > 0) {
 				components[idx] = getImage(v, new File(inF.getParentFile().getParentFile(), "Terrain-Common"), bim.getWidth(), bim.getHeight());
-			} else
+			} else {
 				System.err.println(String.format("No splat texture for %s", p));
+			}
 			idx++;
 		}
 
@@ -111,7 +115,7 @@ public class Base extends AbstractTool {
 	private void drawComponent(BufferedImage[] components, Graphics2D g2, int x, int y, int alpha, int idx) {
 		/* Color in splat image **/
 		if (components[idx] != null) {
-			
+
 
 			Color sc = new Color(components[idx].getRGB(x, y));
 
@@ -127,11 +131,12 @@ public class Base extends AbstractTool {
 		BufferedImage img = cache.get(name + "_" + w + "_" + h);
 		if (img == null) {
 			File f = new File(dir, name);
-			if (!f.exists())
+			if (!f.exists()) {
 				throw new FileNotFoundException(String.format("No splat texture %s", f));
+			}
 			img = ImageIO.read(f);
 			if(img.getWidth() != w || img.getHeight() != h) {
-				Image img2 = img.getScaledInstance(w, h, BufferedImage.SCALE_FAST);
+				Image img2 = img.getScaledInstance(w, h, Image.SCALE_FAST);
 				img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 				img.getGraphics().drawImage(img2, 0, 0, null);
 			}

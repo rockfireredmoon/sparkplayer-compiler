@@ -7,7 +7,7 @@ import java.util.List;
 public abstract class AbstractBatchFileProcessor implements Runnable {
 
 	protected Output console;
-	private List<File> files = new ArrayList<File>();
+	private List<File> files = new ArrayList<>();
 
 	public AbstractBatchFileProcessor(Output console) {
 		this.console = console;
@@ -18,11 +18,12 @@ public abstract class AbstractBatchFileProcessor implements Runnable {
 		return this;
 	}
 
+	@Override
 	public void run() {
 		for (final File file : files) {
 			doFile(file);
 		}
 	}
-	
+
 	protected abstract boolean doFile(File file);
 }

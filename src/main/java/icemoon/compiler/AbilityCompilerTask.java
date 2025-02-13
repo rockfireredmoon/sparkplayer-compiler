@@ -37,12 +37,15 @@ public class AbilityCompilerTask extends AbstractCompilerTask {
 
 			FileNameMapper mapper = new FileNameMapper() {
 
+				@Override
 				public void setTo(String to) {
 				}
 
+				@Override
 				public void setFrom(String from) {
 				}
 
+				@Override
 				public String[] mapFileName(String sourceFileName) {
 					File srcFile = new File(sourceFileName);
 					String basepath = sourceFileName;

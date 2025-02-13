@@ -14,12 +14,11 @@ import org.xml.sax.SAXException;
 
 public class Skeleton extends Mesh {
 
-	private static Skeleton instance = new Skeleton();
-
 	private boolean deleteTemp = true;
 
-	public static Skeleton get() {
-		return instance;
+
+	public Skeleton(Output output) {
+		super(output);
 	}
 
 	public boolean isDeleteTemp() {
@@ -30,11 +29,13 @@ public class Skeleton extends Mesh {
 		this.deleteTemp = deleteTemp;
 	}
 
+	@Override
 	protected boolean doMesh(File dir, File outF, File inF) throws IOException, InterruptedException {
 		File inDir = inF.getParentFile();
 		File tmpFile = new File(inDir, "tmp." + inF.getName());
-		if (deleteTemp)
+		if (deleteTemp) {
 			tmpFile.deleteOnExit();
+		}
 
 		/*
 		 * If there is a .skeletonlist file in this directory, see if the skel
@@ -54,7 +55,7 @@ public class Skeleton extends Mesh {
 			}
 		}
 
-		List<File> animFiles = new ArrayList<File>();
+		List<File> animFiles = new ArrayList<>();
 		for (File f : inDir.listFiles()) {
 			if (f.getName().startsWith(animPrefix) && f.getName().endsWith(".anim")) {
 				animFiles.add(f);
@@ -81,8 +82,9 @@ public class Skeleton extends Mesh {
 				try {
 					return super.doMesh(dir, outF, tmpFile);
 				} finally {
-					if (deleteTemp)
+					if (deleteTemp) {
 						tmpFile.delete();
+					}
 				}
 			} catch (SAXException se) {
 				throw new IOException(se);

@@ -14,15 +14,18 @@ public class WAV extends AbstractTool {
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
 		File outF = new File(out);
-		if (!outF.isAbsolute() && dir != null)
+		if (!outF.isAbsolute() && dir != null) {
 			outF = new File(dir, outF.getPath());
+		}
 
 		File inF = new File(in);
-		if (!inF.isAbsolute() && dir != null)
+		if (!inF.isAbsolute() && dir != null) {
 			inF = new File(dir, inF.getPath());
+		}
 
-		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs())
+		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs()) {
 			throw new IOException("Failed to create output directory for " + outF);
+		}
 
 		List<String> args = getArgs();
 		args.add("oggenc");

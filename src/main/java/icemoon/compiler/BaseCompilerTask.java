@@ -39,18 +39,22 @@ public class BaseCompilerTask extends AbstractCompilerTask {
 
 			FileNameMapper mapper = new FileNameMapper() {
 
+				@Override
 				public void setTo(String to) {
 				}
 
+				@Override
 				public void setFrom(String from) {
 				}
 
+				@Override
 				public String[] mapFileName(String sourceFileName) {
 					File srcFile = new File(sourceFileName);
 					List<String> parts = Arrays.asList(srcFile.getName().split("_"));
 					int idx = parts.indexOf("Coverage");
-					if (idx == -1)
+					if (idx == -1) {
 						throw new IllegalArgumentException("Included files must be [Terrain-Name]_Coverage_XY.png");
+					}
 					String lastPath = parts.get(parts.size() - 1);
 					int pidx = lastPath.lastIndexOf(".");
 					if (pidx != -1) {

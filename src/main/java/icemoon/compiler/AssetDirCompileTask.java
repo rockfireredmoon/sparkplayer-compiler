@@ -1,11 +1,6 @@
 package icemoon.compiler;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.util.FileNameMapper;
 
 public class AssetDirCompileTask extends AbstractCompilerTask {
 	@Override

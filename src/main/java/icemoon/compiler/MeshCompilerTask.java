@@ -18,6 +18,7 @@ public class MeshCompilerTask extends AbstractCompilerTask {
 	@Override
 	public void execute() throws BuildException {
 		try {
+			var mesh = new Mesh(this);
 
 			compileList.clear();
 
@@ -37,12 +38,15 @@ public class MeshCompilerTask extends AbstractCompilerTask {
 
 			FileNameMapper mapper = new FileNameMapper() {
 
+				@Override
 				public void setTo(String to) {
 				}
 
+				@Override
 				public void setFrom(String from) {
 				}
 
+				@Override
 				public String[] mapFileName(String sourceFileName) {
 					File srcFile = new File(sourceFileName);
 					String basepath = Mesh.getMeshBasePath(sourceFileName);
@@ -58,7 +62,7 @@ public class MeshCompilerTask extends AbstractCompilerTask {
 			scanDir(baseDir, files, mapper);
 
 			for (String src : compileList) {
-				if (!Mesh.get().compile(src, mapper.mapFileName(src)[0], baseDir) && failOnError) {
+				if (!mesh.compile(src, mapper.mapFileName(src)[0], baseDir) && failOnError) {
 					throw new BuildException(String.format("Compile of %s failed.", src));
 				}
 			}

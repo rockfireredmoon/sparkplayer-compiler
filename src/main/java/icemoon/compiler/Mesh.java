@@ -2,17 +2,16 @@ package icemoon.compiler;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import icemoon.compiler.Fixer.Type;
 
-public class Mesh extends AbstractTool implements Output {
-
-	private static Mesh instance = new Mesh();
-
-	public static Mesh get() {
-		return instance;
+public class Mesh extends AbstractTool {
+	
+	private final Output output;
+	
+	public Mesh(Output output) {
+		this.output  = output;
 	}
 
 	public static String getMeshBasePath(String sourceFileName) {
@@ -29,15 +28,18 @@ public class Mesh extends AbstractTool implements Output {
 
 	public boolean compile(String in, String out, File dir) throws IOException, InterruptedException {
 		File outF = new File(out);
-		if (!outF.isAbsolute() && dir != null)
+		if (!outF.isAbsolute() && dir != null) {
 			outF = new File(dir, outF.getPath());
+		}
 
 		File inF = new File(in);
-		if (!inF.isAbsolute() && dir != null)
+		if (!inF.isAbsolute() && dir != null) {
 			inF = new File(dir, inF.getPath());
+		}
 
-		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs())
+		if (outF.getParentFile() != null && !outF.getParentFile().exists() && !outF.getParentFile().mkdirs()) {
 			throw new IOException("Failed to create output directory for " + outF);
+		}
 
 		if (!in.endsWith(".mesh.xml") && !in.endsWith(".skeleton.xml")) {
 			throw new IOException("Mesh compiler only processes files ending with .mesh.xml or .skeleton.xml");
@@ -66,7 +68,7 @@ public class Mesh extends AbstractTool implements Output {
 				}
 			}
 
-			Fixer fixer = new Fixer(this, Type.UNFIX);
+			Fixer fixer = new Fixer(output, Type.UNFIX);
 			fixer.addFile(outF);
 			fixer.run();
 
@@ -74,32 +76,6 @@ public class Mesh extends AbstractTool implements Output {
 
 		}
 		return ret == 0;
-	}
-
-	public void error(String text) {
-		error(text, null);
-	}
-
-	public void error(String text, Throwable exception) {
-		System.err.println("FIXER ERR: " + text);
-		if (exception != null)
-			exception.printStackTrace();
-
-	}
-
-	public void message(String text) {
-		System.out.println("FIXER: " + text);
-	}
-
-	public void refresh(File file) {
-	}
-
-	public OutputStream getErrorStream() {
-		return System.err;
-	}
-
-	public OutputStream getStandardStream() {
-		return System.out;
 	}
 
 }

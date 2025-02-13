@@ -7,18 +7,27 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.util.FileNameMapper;
 
-@Deprecated
-public class CARCompilerTask extends AbstractCompilerTask {
+public class OptimizeTask extends AbstractCompilerTask {
 
 	public static final String ERROR_NO_BASE_EXISTS = "base or destdir does not exist: ";
 	/** base not a directory message */
 	public static final String ERROR_NOT_A_DIR = "base or destdir is not a directory:";
 	/** base attribute not set message */
 	public static final String ERROR_BASE_NOT_SET = "base or destdir attribute must be set!";
+	
+
+	private boolean collision;
+	private boolean ignoreErrors;
+	private String optimizePath;
+	private String[] optimizeArgs;
 
 	@Override
 	public void execute() throws BuildException {
 		try {
+			Optimize opt = new Optimize(this);
+			opt.setOptimizePath(optimizePath);
+			opt.setOptimizeArgs(optimizeArgs);
+			opt.setCollision(true);
 
 			compileList.clear();
 
@@ -49,15 +58,12 @@ public class CARCompilerTask extends AbstractCompilerTask {
 				@Override
 				public String[] mapFileName(String sourceFileName) {
 					File srcFile = new File(sourceFileName);
-					String basepath = sourceFileName;
-					int idx = basepath.lastIndexOf(".");
-					if (idx != -1) {
-						basepath = basepath.substring(0, idx);
-					}
+					String basepath = Mesh.getMeshBasePath(sourceFileName);
+					String ext = ".mesh";
 					String cnut = outputDir == null
 							? ((srcFile.getParent() == null ? "" : (srcFile.getParent() + File.separator)) + basepath
-									+ ".car")
-							: (new File(outputDir, basepath + ".car").getPath());
+									+ ext)
+							: (new File(outputDir, basepath + ext).getPath());
 					return new String[] { cnut };
 				}
 			};
@@ -65,8 +71,17 @@ public class CARCompilerTask extends AbstractCompilerTask {
 			scanDir(baseDir, files, mapper);
 
 			for (String src : compileList) {
-				if (!CAR.get().compile(src, mapper.mapFileName(src)[0], baseDir) && failOnError) {
-					throw new BuildException(String.format("Compile of %s failed.", src));
+				try {
+					if (!opt.compile(src, outputDir, baseDir) && failOnError) {
+						throw new BuildException(String.format("Compile of %s failed.", src));
+					}
+				}
+				catch(Exception e) {
+					if(ignoreErrors) {
+						System.out.println("Ignoring error in " + src + ". " + e.getMessage());
+					}
+					else
+						throw e;
 				}
 			}
 		} catch (IOException ioe) {
@@ -78,6 +93,38 @@ public class CARCompilerTask extends AbstractCompilerTask {
 		} finally {
 			cleanup();
 		}
+	}
+
+	public String getOptimizePath() {
+		return optimizePath;
+	}
+
+	public void setOptimizePath(String optimizePath) {
+		this.optimizePath = optimizePath;
+	}
+
+	public String[] getOptimizeArgs() {
+		return optimizeArgs;
+	}
+
+	public void setOptimizeArgs(String[] optimizeArgs) {
+		this.optimizeArgs = optimizeArgs;
+	}
+
+	public boolean isIgnoreErrors() {
+		return ignoreErrors;
+	}
+
+	public void setIgnoreErrors(boolean ignoreErrors) {
+		this.ignoreErrors = ignoreErrors;
+	}
+
+	public boolean isCollision() {
+		return collision;
+	}
+
+	public void setCollision(boolean collision) {
+		this.collision = collision;
 	}
 
 }

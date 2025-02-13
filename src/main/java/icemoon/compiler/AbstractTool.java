@@ -12,8 +12,9 @@ public abstract class AbstractTool {
 	protected File getTempDir() {
 		File tempDir = new File(new File(System.getProperty("java.io.tmpdir")),
 				"ice-" + System.getProperty("user.name"));
-		if (!tempDir.exists() && !tempDir.mkdirs())
+		if (!tempDir.exists() && !tempDir.mkdirs()) {
 			throw new RuntimeException("Could not create temporary directory.");
+		}
 		return tempDir;
 	}
 
@@ -22,7 +23,7 @@ public abstract class AbstractTool {
 	}
 
 	protected List<String> getArgs() {
-		List<String> args = new ArrayList<String>();
+		List<String> args = new ArrayList<>();
 		return args;
 	}
 
@@ -31,14 +32,15 @@ public abstract class AbstractTool {
 		pb.redirectErrorStream(true);
 		Map<String, String> environment = pb.environment();
 		populateRunEnvironment(environment);
-		if (dir != null)
+		if (dir != null) {
 			pb.directory(dir);
+		}
 		Process process = pb.start();
 		if (buf == null) {
-			CompilerUtil.copy(process.getInputStream(), System.out);
+			process.getInputStream().transferTo(System.out);
 		} else {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			CompilerUtil.copy(process.getInputStream(), baos);
+			process.getInputStream().transferTo(baos);
 			buf.append(baos.toString("UTF-8"));
 		}
 		int ret = process.waitFor();
@@ -51,8 +53,9 @@ public abstract class AbstractTool {
 	protected File extract(String tool) {
 		for(String p : System.getenv("PATH").split(File.pathSeparator)) {
 			File f = new File(p, tool);
-			if(f.exists())
+			if(f.exists()) {
 				return f;
+			}
 		}
 		throw new IllegalArgumentException("Could not find tool ' " + tool + "'. Is it installed and on your PATH");
 	}
